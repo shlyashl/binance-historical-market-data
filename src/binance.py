@@ -66,7 +66,7 @@ class Benance:
             time_open = datetime.utcfromtimestamp(candle[0] / 1000).strftime('%Y-%m-%d %H:%M:%S')
             time_close = datetime.utcfromtimestamp(candle[6] / 1000).strftime('%Y-%m-%d %H:%M:%S')
             opening_price_in_usd = candle[1]
-            highest_price_in_isd = candle[2]
+            highest_price_in_usd = candle[2]
             the_lowest_price_in_usd = candle[3]
             closing_price_in_usd = candle[4]
             volume_in_usd = candle[7]
@@ -76,13 +76,13 @@ class Benance:
             transactions_per_minute = candle[8]
 
             data.append(
-                [symbol, time_open, time_close, opening_price_in_usd, highest_price_in_isd, the_lowest_price_in_usd,
+                [symbol, time_open, time_close, opening_price_in_usd, highest_price_in_usd, the_lowest_price_in_usd,
                  closing_price_in_usd, volume_in_usd, volume_in_coins, volume_in_coins_when_taker_buy_coins,
                  volume_in_usd_when_taker_sell_coins, transactions_per_minute])
 
         df = pd.DataFrame(
             data, columns=[
-                'symbol', 'time_open', 'time_close', 'opening_price_in_usd', 'highest_price_in_isd',
+                'symbol', 'time_open', 'time_close', 'opening_price_in_usd', 'highest_price_in_usd',
                 'the_lowest_price_in_usd', 'closing_price_in_usd', 'volume_in_usd', 'volume_in_coins',
                 'volume_in_coins_when_taker_buy_coins', 'volume_in_usd_when_taker_sell_coins',
                 'transactions_per_minute'])
