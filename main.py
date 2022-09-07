@@ -1,7 +1,7 @@
 from pyaml_env import parse_config
 
-from src.tools import logger, ClickHouse
-from src.binance import Benance
+from src.tools import ClickHouse
+from src.binance import Binance
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
                                                                        config['binance']['parse_date_end'])
     bn_symbols_to_skip = ch.select(bn_symbols_to_skip_query).symbol.to_list()
 
-    job = Benance(ch, bn_symbols_to_skip, **config['binance'])
+    job = Binance(ch, bn_symbols_to_skip, **config['binance'])
     job.execute_job()
 
 

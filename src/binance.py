@@ -13,7 +13,7 @@ import aiohttp
 from src.tools import logger
 
 
-class Benance:
+class Binance:
     def __init__(self, ch_conn, symbols_to_skip=None, **kwargs):
         self._tickers_url = kwargs['api_tickers_url']
         self.ch_conn = ch_conn
@@ -25,7 +25,7 @@ class Benance:
         self.intervals = self._get_dt_intervals()
         self.tasks_description = [[e[0], *e[1]] for e in product(self.symbols, self.intervals)]
         self._ioloop = asyncio.get_event_loop()
-        self._max_rps = asyncio.Semaphore(16)
+        self._max_rps = asyncio.Semaphore(15)
 
     def _get_tickers(self) -> list:
         response = requests.get(url=self._tickers_url)
