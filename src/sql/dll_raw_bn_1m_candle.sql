@@ -3,7 +3,7 @@ create table raw_bn_1m_candle
     time_open DateTime,
     time_close DateTime,
     opening_price_in_usd Float64,
-    highest_price_in_isd Float64,
+    highest_price_in_usd Float64,
     the_lowest_price_in_usd Float64,
     closing_price_in_usd Float64,
     volume_in_usd Float64,
