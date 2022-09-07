@@ -13,7 +13,7 @@ import aiohttp
 logger = logging
 logger.basicConfig(
     format=f'%(asctime)s [%(levelname)s] %(name)s:\t\t%(message)s',
-    level=logging.INFO
+    level=logging.DEBUG
 )
 
 
