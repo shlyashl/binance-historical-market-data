@@ -1,6 +1,6 @@
 binance:
-  parse_date_start: '2020-01-01'
-  parse_date_end: '2020-01-03'
+  parse_date_start: '2014-01-01'
+  parse_date_end: '2022-09-07'
   api_tickers_url: 'https://api.binance.com/api/v3/ticker/bookTicker'
   api_klines_url: 'https://api.binance.com/api/v3/klines?symbol={}&interval=1m&limit=1000&startTime={}&endTime={}'
 
