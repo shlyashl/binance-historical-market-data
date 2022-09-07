@@ -10,5 +10,3 @@ clickhouse:
   password: !ENV ${CH_OO_PASS}
   table: 'raw_bn_1m_candle'
   asyncio_bounded_semaphore: 100
-
-
