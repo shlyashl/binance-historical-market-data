@@ -9,4 +9,4 @@ clickhouse:
   user: 'oo'
   password: !ENV ${CH_OO_PASS}
   table: 'raw_bn_1m_candle'
-  asyncio_bounded_semaphore: 1
+  asyncio_bounded_semaphore: 20
