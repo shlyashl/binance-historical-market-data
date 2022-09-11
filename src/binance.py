@@ -114,3 +114,4 @@ class Binance:
 
     def execute_job(self):
         return self._ioloop.run_until_complete(self._tasks_loop())
+
