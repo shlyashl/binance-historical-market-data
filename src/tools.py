@@ -17,7 +17,7 @@ logger.basicConfig(
 )
 
 
-def try_again(func, tries=2, delay=3):
+def try_again(func, tries=20, delay=5):
     def wraper(*args, **kwargs):
         for t in range(tries):
             try:
