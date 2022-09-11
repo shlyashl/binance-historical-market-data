@@ -110,6 +110,7 @@ class Binance:
                     new_task = asyncio.ensure_future(self._get_candle_data(*tasks[task]))
                     tasks[new_task] = tasks[task]
                     pending.add(new_task)
+                    await asyncio.sleep(10)
         logger.info('Job done')
 
     def execute_job(self):
