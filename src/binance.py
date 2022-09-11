@@ -104,7 +104,7 @@ class Binance:
                 except:
                     num_times_called += 1
                     logger.info("Unexpected error: {}".format(traceback.format_exc()))
-                    if num_times_called >= 10:
+                    if num_times_called >= 1000:
                         self._ioloop.stop()
 
                     new_task = asyncio.ensure_future(self._get_candle_data(*tasks[task]))
