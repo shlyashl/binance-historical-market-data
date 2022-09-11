@@ -10,7 +10,7 @@ import pandas as pd
 import asyncio
 import aiohttp
 
-from src.tools import logger
+from src.tools import logger, try_again
 
 
 class Binance:
@@ -48,6 +48,7 @@ class Binance:
         logger.debug(f'{intervals=}')
         return intervals
 
+    @try_again
     async def _get_candle_data(self, symbol: str, ts_start: str, ts_end: str):
         url = self.klines_url.format(symbol, ts_start, ts_end)
 

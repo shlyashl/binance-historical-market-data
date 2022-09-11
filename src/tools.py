@@ -77,6 +77,7 @@ class ClickHouse:
 
         logger.info(f'{table} truncated')
 
+    @try_again
     def select(self, query) -> pd.DataFrame:
         query_dict = {'query': query + f'\nFORMAT TSVWithNames'}
         r = requests.post(self._host, params=query_dict, auth=(self._user, self._password), verify=False)
