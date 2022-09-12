@@ -68,6 +68,7 @@ class Binance:
                 time_open = datetime.utcfromtimestamp(candle[0] / 1000).strftime('%Y-%m-%d %H:%M:%S')
             except:
                 print(candle, '!!!!!')
+                print(response_json, '!!!!!')
                 exit()
             time_close = datetime.utcfromtimestamp(candle[6] / 1000).strftime('%Y-%m-%d %H:%M:%S')
             opening_price_in_usd = candle[1]
