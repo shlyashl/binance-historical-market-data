@@ -26,7 +26,7 @@ class Binance:
         self.intervals = self._get_dt_intervals()
         self.tasks_description = [[e[0], *e[1]] for e in product(self.symbols, self.intervals)]
         self._ioloop = asyncio.get_event_loop()
-        self._max_rps = asyncio.Semaphore(15)
+        self.bounded_semaphore = self.ch_conn.bounded_semaphore
 
     def _get_tickers(self) -> list:
         response = requests.get(url=self._tickers_url)
@@ -51,10 +51,11 @@ class Binance:
 
     @try_again
     async def _get_candle_data(self, symbol: str, ts_start: str, ts_end: str):
+        task_start = datetime.now()
         url = self.klines_url.format(symbol, ts_start, ts_end)
 
         async with aiohttp.ClientSession() as session:
-            async with self._max_rps, session.get(url) as response:
+            async with self.bounded_semaphore, session.get(url) as response:
                 response_json = await response.json()
                 await asyncio.sleep(0.1)
 
@@ -95,6 +96,11 @@ class Binance:
             await self.ch_conn.insert(df)
 
             logger.info(f'Data inserted into for task {symbol=} {ts_start=} {ts_end=}')
+
+
+        sleep_for = (datetime.now() - task_start).microseconds / 1_000_000
+        if sleep_for < 1:
+            await asyncio.sleep(sleep_for)
 
     async def _tasks_loop(self):
         tasks = {asyncio.ensure_future(self._get_candle_data(*task)): task for task in self.tasks_description}
