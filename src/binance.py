@@ -26,7 +26,7 @@ class Binance:
         self.intervals = self._get_dt_intervals()
         self.tasks_description = [[e[0], *e[1]] for e in product(self.symbols, self.intervals)]
         self._ioloop = asyncio.get_event_loop()
-        self.bounded_semaphore = kwargs['asyncio_bounded_semaphore']
+        self.bounded_semaphore = asyncio.BoundedSemaphore(kwargs['asyncio_bounded_semaphore'])
 
     def _get_tickers(self) -> list:
         response = requests.get(url=self._tickers_url)
@@ -46,7 +46,6 @@ class Binance:
         intervals = [[str(int(i[0].replace(tzinfo=timezone.utc).timestamp() * 1000)),
                       str(int(i[1].replace(tzinfo=timezone.utc).timestamp() * 1000) - 1000)] for i in zipped_intervals]
 
-        logger.debug(f'{intervals=}')
         return intervals
 
     @try_again
@@ -54,11 +53,10 @@ class Binance:
         task_start = datetime.now()
         url = self.klines_url.format(symbol, ts_start, ts_end)
 
-        connector = aiohttp.TCPConnector(limit=self.bounded_semaphore)
-        async with aiohttp.ClientSession(connector=connector) as session:
-            async with session.get(url) as response:
+        async with aiohttp.ClientSession() as session:
+            async with self.bounded_semaphore, session.get(url) as response:
                 response_json = await response.json()
-                await asyncio.sleep(0.1)
+
 
         assert response_json or response_json == [], f'Empty data: {url}'
 
