@@ -106,7 +106,6 @@ class Binance:
                     num_times_called += 1
                     logger.info("Unexpected error: {}".format(traceback.format_exc()))
                     logger.info(f'Err task: {tasks[task]}')
-                    exit()
                     if num_times_called >= 100000:
                         self._ioloop.stop()
 
