@@ -56,7 +56,7 @@ class Binance:
 
         connector = aiohttp.TCPConnector(limit=self.bounded_semaphore)
         async with aiohttp.ClientSession(connector=connector) as session:
-            async with self.bounded_semaphore, session.get(url) as response:
+            async with session.get(url) as response:
                 response_json = await response.json()
                 await asyncio.sleep(0.1)
 
