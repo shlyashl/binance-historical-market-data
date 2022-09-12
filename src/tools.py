@@ -43,13 +43,12 @@ def _get_sql_dict():
 
 
 class ClickHouse:
-    def __init__(self, host, user, password, table, asyncio_bounded_semaphore):
+    def __init__(self, host, user, password, table):
         self._host = host
         self._user = user
         self._password = password
         self._table = table
         self.queries = _get_sql_dict()
-        self.bounded_semaphore = asyncio.BoundedSemaphore(asyncio_bounded_semaphore)
 
     async def insert(self, df_data, table=None):
         csv_buffer = StringIO()
@@ -59,9 +58,9 @@ class ClickHouse:
         query_dict = {'query': f'insert into {table} format TSVWithNames'}
 
         async with aiohttp.ClientSession() as session:
-            async with self.bounded_semaphore, session.post(self._host, params=query_dict,
-                                                            auth=aiohttp.BasicAuth(self._user, self._password),
-                                                            data=csv_buffer.getvalue().encode('utf-8')) as response:
+            async with session.post(self._host, params=query_dict,
+                                    auth=aiohttp.BasicAuth(self._user, self._password),
+                                    data=csv_buffer.getvalue().encode('utf-8')) as response:
                 response_txt = await response.text()
                 await asyncio.sleep(0.1)
 

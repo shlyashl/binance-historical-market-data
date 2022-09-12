@@ -3,10 +3,10 @@ binance:
   parse_date_end: '2022-09-07'
   api_tickers_url: 'https://api.binance.com/api/v3/ticker/bookTicker'
   api_klines_url: 'https://api.binance.com/api/v3/klines?symbol={}&interval=1m&limit=1000&startTime={}&endTime={}'
+  asyncio_bounded_semaphore: 20
 
 clickhouse:
   host: 'http://45.87.104.115:8123/'
   user: 'oo'
   password: !ENV ${CH_OO_PASS}
   table: 'raw_bn_1m_candle'
-  asyncio_bounded_semaphore: 20
