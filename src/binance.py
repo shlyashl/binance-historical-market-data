@@ -50,15 +50,15 @@ class Binance:
 
     @try_again
     async def _get_candle_data(self, symbol: str, ts_start: str, ts_end: str):
-        task_start = datetime.now()
         url = self.klines_url.format(symbol, ts_start, ts_end)
 
         async with aiohttp.ClientSession() as session:
             async with self.bounded_semaphore, session.get(url) as response:
+                task_start = datetime.now()
                 response_json = await response.json()
-
-
-        assert response_json or response_json == [], f'Empty data: {url}'
+                sleep_for = 1 - (datetime.now() - task_start).microseconds / 1_000_000
+                if sleep_for > 0:
+                    await asyncio.sleep(sleep_for)
 
         if not response_json:
             logger.warning(f'Recived empty response from binance: {url=}')
@@ -95,11 +95,6 @@ class Binance:
             await self.ch_conn.insert(df)
 
             logger.info(f'Data inserted into for task {symbol=} {ts_start=} {ts_end=}')
-
-
-        sleep_for = (datetime.now() - task_start).microseconds / 1_000_000
-        if sleep_for < 1:
-            await asyncio.sleep(sleep_for)
 
     async def _tasks_loop(self):
         tasks = {asyncio.ensure_future(self._get_candle_data(*task)): task for task in self.tasks_description}
