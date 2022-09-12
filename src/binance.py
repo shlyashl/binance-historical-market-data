@@ -63,7 +63,7 @@ class Binance:
         if not response_json:
             logger.warning(f'Recived empty response from binance: {url=}')
         elif 'code' in response_json and response_json['code'] == -1003:
-            logger.warning(f'Too much request, sleep for 10 sec')
+            logger.warning(f'Too much requests, sleep for 10 sec')
             sleep(10)
         else:
             data = []
