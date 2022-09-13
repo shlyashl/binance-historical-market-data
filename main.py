@@ -11,9 +11,9 @@ def main():
 
     bn_symbols_to_skip_query = ch.queries['bn_symbols_to_skip'].format(config['binance']['parse_date_start'],
                                                                        config['binance']['parse_date_end'])
-    # bn_symbols_to_skip = ch.select(bn_symbols_to_skip_query).symbol.to_list()
+    bn_symbols_to_skip = ch.select(bn_symbols_to_skip_query).symbol.to_list()
 
-    job = Binance(ch, **config['binance'])
+    job = Binance(ch, bn_symbols_to_skip, **config['binance'])
     job.execute_job()
 
 
