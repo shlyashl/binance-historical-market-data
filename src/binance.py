@@ -15,7 +15,8 @@ from src.tools import logger, try_again
 
 
 class Binance:
-    def __init__(self, ch_conn, symbols_to_skip=None, **kwargs):
+    def __init__(self, ch_conn, symbols_to_skip=[], **kwargs):
+        self.fill_messed_intarvals = kwargs['fill_messed_intarvals']
         self._tickers_url = kwargs['api_tickers_url']
         self.ch_conn = ch_conn
         self.klines_url = kwargs['api_klines_url']
@@ -24,9 +25,15 @@ class Binance:
         self.symbols_to_skip = symbols_to_skip
         self.symbols = self._get_tickers()
         self.intervals = self._get_dt_intervals()
-        self.tasks_description = [[e[0], *e[1]] for e in product(self.symbols, self.intervals)]
+        self.tasks_description = self._get_tasks_description()
         self._ioloop = asyncio.get_event_loop()
         self.bounded_semaphore = asyncio.BoundedSemaphore(kwargs['asyncio_bounded_semaphore'])
+
+    def _get_tasks_description(self):
+        if self.fill_messed_intarvals:
+            return self.ch_conn.select(self.ch_conn.queries['mised_intervals']).values.tolist()
+        else:
+            return [[e[0], *e[1]] for e in product(self.symbols, self.intervals)]
 
     def _get_tickers(self) -> list:
         response = requests.get(url=self._tickers_url)
