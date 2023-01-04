@@ -35,10 +35,12 @@ def try_again(func, tries=20, delay=5):
 
 
 def _get_sql_dict():
-    sql_path = 'src/sql'
+    import importlib
+    from glob import glob
+    sql_path = importlib.resources.files('src.sql')
     queries = {
         f.split('.')[0]: open(f'{sql_path}/{f}', mode='r', encoding='utf-8').read()
-        for f in [f for f in os.listdir(sql_path)]}
+        for f in [f for f in os.listdir(sql_path) if '.sql' in f]}
     return queries
 
 
