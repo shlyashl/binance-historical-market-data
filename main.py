@@ -13,7 +13,7 @@ from src.binance import Binance
 def main(parse_date_start: str = None, parse_date_end: str = None):
     load_dotenv(pkg_resources.resource_filename(__name__, '/.env'))
     config = parse_config(pkg_resources.resource_filename(__name__, '/config.yml'))
-    print(config)
+
     if parse_date_start and parse_date_end:
         config['binance']['parse_date_start'] = parse_date_start
         config['binance']['parse_date_end'] = parse_date_end
