@@ -1,14 +1,17 @@
 import os
 import pkg_resources
-
-from pyaml_env import parse_config
 from io import BytesIO
 import sys
+
+from dotenv import load_dotenv
+from pyaml_env import parse_config
+
 from src.tools import ClickHouse
 from src.binance import Binance
 
 
 def main(parse_date_start: str = None, parse_date_end: str = None):
+    load_dotenv(pkg_resources.resource_filename(__name__, '/.env'))
     config = parse_config(pkg_resources.resource_filename(__name__, '/config.yml'))
     print(config)
     if parse_date_start and parse_date_end:
